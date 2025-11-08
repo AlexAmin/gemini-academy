@@ -226,7 +226,7 @@ export default function App() {
             if (i === 0) {
                 return `<div class="slide intro-slide">
                           <div class="video-container">
-                            <video src="${generatedAssets.videoUrl}" controls autoplay muted loop></video>
+                            <video src="${generatedAssets.videoUrl}" controls autoplay loop></video>
                           </div>
                           <div class="intro-overlay">
                             <h1 class="intro-title">${lecturePlan.unit_title}</h1>
