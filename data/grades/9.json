@@ -1,0 +1,62 @@
+[
+  {
+    "id": "WREGEO",
+    "grade": 9,
+    "unit_title": "World and Regional Geography",
+    "summary": "This course provides an overview of various regions in the world, analyzing their specific geographic features. It focuses on how a society’s **geographic location and environment shape work and living opportunities**, as well as its relationships with people outside that society. Key thematic issues include global investment, regional inequality, crises in developing nations, technological innovation, and **geopolitics**, such as how oil shapes foreign diplomacy and conflicts."
+  },
+  {
+    "id": "CAHIST",
+    "grade": 9,
+    "unit_title": "California History",
+    "summary": "A chronological history of California focusing on the people, natural resources, and government investment in growth. Units of study include **Turn-of-the-Century California**, focusing on challenges like the battle over Hetch Hetchy; the **highs and lows defined by the 1920s and 1930s**; and the **Civil Rights Movement** (e.g., Cesar Chavez, Black Panther Party, Alcatraz Occupation). The course examines the state’s strategic geographic position on the **Pacific Rim** and its continuing draw for immigrants and global commerce."
+  },
+  {
+    "id": "CONTWORLD",
+    "grade": 9,
+    "unit_title": "Contemporary World and Geography",
+    "summary": "This course examines current global issues, noting the tension between **integrative** forces (globalization, interdependence) and **disintegrative** forces (nationalist, separatist conflict). It involves the study of **Physical Geography**, including natural features and processes, the human presence on Earth, and the mutual impact of humans and the environment. Topics include analyzing environmental changes such as deforestation, pollution, and climate change."
+  },
+  {
+    "id": "RELPHIL",
+    "grade": 9,
+    "unit_title": "Religion and Philosophy",
+    "summary": "The course is designed to **learn about religion**, not to teach or promote religion itself, upholding the protections for religious freedom in the First Amendment. It uses writings, art, and music from diverse modern representations (e.g., Descartes, Thomas Paine, Picasso, Maya Angelou) to shed light on various aspects of the human experience and improve students’ ability to articulate their own interests and responsibilities."
+  },
+  {
+    "id": "CULTANTHRO",
+    "grade": 9,
+    "unit_title": "Cultural Anthropology",
+    "summary": "Examines the range of systems, practices, and customs characteristic of communities in the contemporary world, promoting an appreciation for **human diversity**. Course content covers evolution, human variation and adaptation, hunter-gatherer societies, the development of cities, political systems, and various cultural expressions like religion, marriage, and family."
+  },
+  {
+    "id": "PSYCH",
+    "grade": 9,
+    "unit_title": "Psychology",
+    "summary": "Covers identifying key psychologists’ contributions, explaining how psychological research is conducted, evaluating test reliability, and describing **cognitive, physiological, and moral developments** across the human life span. Other topics include explaining the parts and functions of the brain, principles of conditioning, and evaluating personality theories and psychological disorders. The course emphasizes critical thinking and problem-solving skills associated with human behavior."
+  },
+  {
+    "id": "SOCIOLOGY",
+    "grade": 9,
+    "unit_title": "Sociology",
+    "summary": "Introduces the sociological perspective on human behavior, guided by the question: **'What external forces shape people’s lives and make them who they are?'**. Students learn scientific methods to research society, analyze face-to-face interactions versus large-scale forces, and understand and identify **structural inequality**, including prejudice and discrimination."
+  },
+  {
+    "id": "ETHNICST",
+    "grade": 9,
+    "unit_title": "Ethnic Studies Courses",
+    "summary": "These courses focus on the **historic struggle of communities of color** to challenge racism and oppression. They may focus on the history and culture of a single racialized group (e.g., African American, Asian American, or Chicana/o and Latina/o history), taking into account the intersectionality of identity (gender, class, sexuality). Instructional methods include reading multiple perspectives, collecting oral histories, and engaging in **service-learning projects**."
+  },
+  {
+    "id": "LAWEDU",
+    "grade": 9,
+    "unit_title": "Law-Related Education",
+    "summary": "Aims to provide a practical understanding of the **law and legal system** developed under the U.S. Constitution and Bill of Rights. Content includes civil and criminal law, constitutional rights (e.g., First, Fourth, Fifth, Sixth, Eighth, and Fourteenth Amendments), and current legal issues and controversies. Mock trials and other simulated legal procedures are suggested instructional strategies."
+  },
+  {
+    "id": "FINLIT",
+    "grade": 9,
+    "unit_title": "Financial Literacy/Economics",
+    "summary": "Content focuses on practical financial concepts, including conducting **cost–benefit analysis** for decisions, researching careers and income, and developing budgets to account for fixed and variable expenses. Students learn about saving and investing, the power of **compound interest**, and evaluating credit choices, interest rates, and the dangers of identity theft."
+  }
+]

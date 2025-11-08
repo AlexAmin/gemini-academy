@@ -1,0 +1,27 @@
+{
+    "grade": 9,
+    "unit_title": "World and Regional Geography",
+    "content_standard": "Students apply Historical and Social Sciences Analysis Skills (9–12) to analyze geographic features, global issues, and the impact of location on human societies and international relationships.",
+    "overview": "This course surveys various global regions and their specific geographic features, transitioning to a thematic approach focused on globally significant issues. The course explores global investment, regional inequality, crises in developing nations, technological innovation, and regional and global development.",
+    "guiding_questions": [
+      {
+        "category": "Geographic Influence and Global Issues",
+        "questions": [
+          "How does a society’s geographic location and environment shape work and living opportunities as well as relationships with people outside of that society?",
+          "How has oil shaped production and trade alliances, foreign diplomacy, and armed conflicts?",
+          "What national concerns occupy different countries, and how does this affect their global position?"
+        ]
+      }
+    ],
+    "content_and_themes": [
+      {
+        "theme": "Regional Analysis and Geopolitics",
+        "details": [
+          "Overview of important regions including North America, Middle and South America, Europe, Russia and Central Asia, East Asia, South and Southeast Asia, Southwest Asia, North Africa, sub-Saharan Africa, and Oceania.",
+          "Exploration of key global issues such as foreign trade, global investment, regional inequality, and technological innovation.",
+          "Analysis of how natural resources, such as oil, serve as a key driver in geopolitics.",
+          "Students use global data from sources like the CIA World Factbook and the U.S. Census Bureau to investigate the diversity of human experiences in Earth's varied regions."
+        ]
+      }
+    ]
+  }

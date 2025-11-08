@@ -1,0 +1,27 @@
+{
+    "grade": 9,
+    "unit_title": "Contemporary World and Geography",
+    "content_standard": "Students apply Historical and Social Sciences Analysis Skills (9–12) to assess contemporary global issues, integrating geographic principles (e.g., human-environment interaction) and physical systems.",
+    "overview": "This course examines current global issues, exploring the tension between **integrative** forces (e.g., globalization) and **disintegrative** forces (e.g., nationalist conflict). It incorporates the study of **Physical Geography** (natural features and processes) and the mutual impact of humans and the environment.",
+    "guiding_questions": [
+      {
+        "category": "Earth Systems and Human Interaction",
+        "questions": [
+          "How do the Earth’s systems operate independently and in relationship to one another, and what has this meant for humans over time?",
+          "How have human-driven reasons contributed to the environment changing over time?",
+          "How do natural resources, climate, and landforms affect how plants, animals, and people live?"
+        ]
+      }
+    ],
+    "content_and_themes": [
+      {
+        "theme": "Physical Geography and Environmental Challenges",
+        "details": [
+          "Study of physical features and processes on or near the planet's surface, including the human presence on Earth and environmental impact.",
+          "Investigation of environmental changes such as deforestation, soil degradation, air/water pollution, and the consequences of **climate change**.",
+          "Examination of California's geography to reflect on economic opportunities (agriculture, tourism) and environmental challenges, such as **scarcity of fresh water**.",
+          "Use of multiple data layers (e.g., climate zone maps, seismic activity) to create detailed maps and analyze the interaction between features and human activity."
+        ]
+      }
+    ]
+  }

@@ -1,0 +1,25 @@
+{
+    "grade": 9,
+    "unit_title": "Law-Related Education",
+    "content_standard": "Students apply Historical and Social Sciences Analysis Skills (9–12) to gain practical understanding of the legal system, civil rights, and constitutional law.",
+    "overview": "This course provides students with a practical understanding of the law and the legal system developed under the U.S. Constitution and **Bill of Rights**. Students are encouraged to participate as citizens in the legal process and become aware of current legal issues.",
+    "guiding_questions": [
+      {
+        "category": "Law and Justice",
+        "questions": [
+          "How can the legal system protect civil rights and promote justice in American society?"
+        ]
+      }
+    ],
+    "content_and_themes": [
+      {
+        "theme": "Constitutional and Legal Principles",
+        "details": [
+          "Introduction to the origin and development of the legal system, including civil and criminal law.",
+          "Study of the rights guaranteed by the **First, Fourth, Fifth, Sixth, Eighth, and Fourteenth Amendments**.",
+          "Analysis of education law, specifically the growing role of the courts in influencing school policy and practice.",
+          "Use of mock trials and other simulated legal procedures, along with resource experts, to enhance understanding."
+        ]
+      }
+    ]
+  }

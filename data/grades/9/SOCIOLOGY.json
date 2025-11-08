@@ -1,0 +1,25 @@
+{
+    "grade": 9,
+    "unit_title": "Sociology",
+    "content_standard": "Students apply Historical and Social Sciences Analysis Skills (9–12) to analyze social structures and external forces that shape human behavior and result in structural inequality.",
+    "overview": "This course introduces students to the sociological perspective, which emphasizes the influence of **external forces** such as social norms, opportunities, and constraints on human behavior. Sociologists use a scientific approach with systematic methods and clear measurements to test hypotheses.",
+    "guiding_questions": [
+      {
+        "category": "Society and Inequality",
+        "questions": [
+          "What external forces shape people’s lives and make them who they are?"
+        ]
+      }
+    ],
+    "content_and_themes": [
+      {
+        "theme": "Social Structures and Research Methods",
+        "details": [
+          "Learning scientific methods used to research society.",
+          "Analyzing face-to-face interactions versus large-scale forces in shaping social reality.",
+          "Understanding and identifying **structural inequality**, including prejudice and discrimination.",
+          "Compiling and comparing data on socioeconomic factors (e.g., race, income, poverty rates) to evaluate social opportunities and challenges within different communities."
+        ]
+      }
+    ]
+  }

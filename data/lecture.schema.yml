@@ -1,0 +1,72 @@
+openapi: 3.0.0
+info:
+  title: Lehrplaneinheit Schema
+  version: v1
+  description: Beschreibt die Struktur einer Lehrplaneinheit für ein Unterrichtsfach, einschließlich Inhalt, Lernziele und Themen.
+---
+components:
+  schemas:
+    Frage:
+      type: object
+      properties:
+        category:
+          type: string
+          description: Die Kategorie der Leitfragen (z.B. 'The Impact of Globalization').
+          example: The Impact of Globalization
+        questions:
+          type: array
+          description: Eine Liste spezifischer Leitfragen innerhalb dieser Kategorie.
+          items:
+            type: string
+            example: How has globalization affected people, nations, and capital?
+
+    ThemenDetail:
+      type: object
+      properties:
+        theme:
+          type: string
+          description: Der Haupttitel oder das Thema des Abschnitts (z.B. 'Economic Integration and Technology').
+          example: I. Economic Integration and Technology
+        details:
+          type: array
+          description: Eine Liste detaillierter Punkte oder Unterthemen, die das Thema beschreiben.
+          items:
+            type: string
+            example: Economic globalization was key to the development of communications technology that enables financial information and funds to move easily across borders.
+
+    Lehrplaneinheit:
+      type: object
+      required:
+        - grade
+        - unit_title
+        - content_standard
+        - overview
+        - guiding_questions
+        - content_and_themes
+      properties:
+        grade:
+          type: integer
+          description: Die Klassenstufe, für die die Einheit vorgesehen ist.
+          example: 10
+        unit_title:
+          type: string
+          description: Der vollständige Titel der Unterrichtseinheit.
+          example: Economic Integration and Contemporary Revolutions in Information, Technology, and Communications (The Globalized World)
+        content_standard:
+          type: string
+          description: Die spezifische Inhaltsnorm oder der Lehrplanstandard.
+          example: 10.11 Students analyze the integration of countries into the world economy and the information, technological, and communications revolutions (e.g., television, satellites, computers).
+        overview:
+          type: string
+          description: Eine zusammenfassende Beschreibung und Einführung in die Einheit.
+          example: This unit covers the accelerated trend of globalization—the freer and faster movement of people, ideas, capital, and resources across borders...
+        guiding_questions:
+          type: array
+          description: Eine Liste von Leitfragen, gruppiert nach Kategorie.
+          items:
+            $ref: '#/components/schemas/Frage'
+        content_and_themes:
+          type: array
+          description: Detaillierte Inhalte und Hauptthemen der Einheit, gruppiert nach Abschnitten.
+          items:
+            $ref: '#/components/schemas/ThemenDetail'

@@ -1,0 +1,28 @@
+{
+    "grade": 9,
+    "unit_title": "Financial Literacy/Economics",
+    "content_standard": "Students apply economic reasoning and analysis skills (9–12) to evaluate financial decisions, cost-benefit analysis, and scarcity in personal and market contexts.",
+    "overview": "This course focuses on practical financial concepts, building student **financial literacy**. It applies fundamental economic concepts, such as scarcity, alternatives, choice, and opportunity cost, through a personal lens.",
+    "guiding_questions": [
+      {
+        "category": "Personal Finance and Economic Reasoning",
+        "questions": [
+          "How should individuals budget and manage their resources, recognizing scarcity and opportunity cost?",
+          "How can students use cost–benefit analysis to evaluate postsecondary training and/or education options?",
+          "What factors determine the value of a career, and how does income relate to human capital?"
+        ]
+      }
+    ],
+    "content_and_themes": [
+      {
+        "theme": "Budgeting, Capital, and Choice",
+        "details": [
+          "Conducting research on careers, estimating income paid, and determining the **human capital** required.",
+          "Analyzing a pay stub to identify gross income, net income, and deductions.",
+          "Learning about fixed and variable expenses and developing a **budget**.",
+          "Applying cost–benefit analysis to decisions like comparison shopping.",
+          "Exploring concepts related to saving, including the power of **compound interest**, and evaluating credit choices and interest rates."
+        ]
+      }
+    ]
+  }

@@ -1,0 +1,27 @@
+{
+    "grade": 9,
+    "unit_title": "Ethnic Studies Courses",
+    "content_standard": "Students apply Historical and Social Sciences Analysis Skills (9–12) to analyze the historic struggle of communities of color to challenge racism and oppression and investigate the intersectionality of identity.",
+    "overview": "These courses focus on the **historic struggle of communities of color** to challenge racism and oppression, considering the intersectionality of identity (gender, class, sexuality). They build on students' lived experiences and promote critical study of communities.",
+    "guiding_questions": [
+      {
+        "category": "History, Identity, and Activism",
+        "questions": [
+          "What is the story of our community?",
+          "How does the story of our community connect to my personal story?",
+          "In what ways have members of my community engaged in political activism?"
+        ]
+      }
+    ],
+    "content_and_themes": [
+      {
+        "theme": "Racialized Experiences and Community Activism",
+        "details": [
+          "Study of the history and culture of single racialized groups (e.g., African American, Asian American, Chicana/o and Latina/o history).",
+          "Exploration of local histories, including issues like **'redlining'** and policies that resulted in the concentration of communities of color into certain neighborhoods.",
+          "Instructional approaches include collecting **oral histories**, participating in community partnerships, and engaging in **service-learning projects**.",
+          "Analyzing written sources, maps, and artwork to support claims related to migrations and community impact."
+        ]
+      }
+    ]
+  }

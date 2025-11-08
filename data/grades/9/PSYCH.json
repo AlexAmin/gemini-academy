@@ -1,0 +1,26 @@
+{
+    "grade": 9,
+    "unit_title": "Psychology",
+    "content_standard": "Students apply Historical and Social Sciences Analysis Skills (9–12) to study human behavior using scientific principles and research methods.",
+    "overview": "This course introduces students to the scientific study of human behavior, including thought, emotion, and actions, emphasizing the biological and social bases of behavior. It contributes to improved **critical thinking** and problem-solving skills.",
+    "guiding_questions": [
+      {
+        "category": "Behavior and Cognition",
+        "questions": [
+          "What principles govern and affect an individual’s perception, ability to learn, motivation, intelligence, and personality?"
+        ]
+      }
+    ],
+    "content_and_themes": [
+      {
+        "theme": "The Scientific Study of Human Behavior",
+        "details": [
+          "Identifying contributions of key psychologists and explaining psychological research methodology.",
+          "Evaluation of test standardization, reliability, and validity.",
+          "Describing **cognitive, physiological, and moral developments** across the human life span.",
+          "Examining the parts and functions of the brain, principles of conditioning, and major personality theories and psychological disorders.",
+          "Analyzing universal emotions and culturally determined ways of expressing them, and their relation to psychological stress."
+        ]
+      }
+    ]
+  }

@@ -1,0 +1,25 @@
+{
+    "grade": 9,
+    "unit_title": "Cultural Anthropology",
+    "content_standard": "Students apply Historical and Social Sciences Analysis Skills (9–12) to examine and appreciate human diversity through the study of community systems, practices, and customs.",
+    "overview": "Cultural anthropology examines the range of systems, practices, and customs that characterize communities in the contemporary world. The course promotes an appreciation for **human diversity** in all its complexity.",
+    "guiding_questions": [
+      {
+        "category": "Human Behavior and Culture",
+        "questions": [
+          "Why are people who they are? Why do they do what they do?"
+        ]
+      }
+    ],
+    "content_and_themes": [
+      {
+        "theme": "Community Systems and Practices",
+        "details": [
+          "Introduction to human evolution, genetics, human variation, and adaptation.",
+          "Exploration of hunter-gatherer societies and early agriculture.",
+          "Study of the development of cities, political states, and systems.",
+          "Analysis of various cultural expressions, including religion, marriage and family, and artistic forms in the contemporary world."
+        ]
+      }
+    ]
+  }
