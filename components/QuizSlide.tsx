@@ -59,11 +59,11 @@ export const QuizSlide: React.FC<QuizSlideProps> = ({ question, questionNumber, 
             {isAnswered && (
                 <div className="flex-shrink-0 mt-4 text-center">
                     {selectedOption === question.answer ? (
-                        <div className="bg-green-500 text-white px-8 py-4 rounded-2xl text-2xl font-bold inline-block shadow-xl">
+                        <div className="h-full w-full bg-green-500 text-white px-8 py-4 rounded-2xl text-2xl font-bold inline-block shadow-xl">
                             🎉 Correct!
                         </div>
                     ) : (
-                        <div className="bg-red-500 text-white px-8 py-4 rounded-2xl text-xl font-bold inline-block shadow-xl">
+                        <div className="h-full w-full bg-red-500 text-white px-8 py-4 rounded-2xl text-xl font-bold inline-block shadow-xl">
                             ❌ Incorrect. The correct answer is: {question.answer}
                         </div>
                     )}
