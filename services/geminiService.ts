@@ -3,7 +3,7 @@ import { GoogleGenAI, Type, Modality } from "@google/genai";
 import mime from "mime";
 import type { Quiz } from "../types";
 
-const getGenAI = () => new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const getGenAI = () => new GoogleGenAI({ apiKey: localStorage.getItem('GEMINI_API_KEY')});
 
 interface WavConversionOptions {
     numChannels: number;
@@ -320,7 +320,7 @@ export async function generateVideo(prompt: string, imageBase64?: string): Promi
     }
 
     // The download link needs the API key appended
-    const videoUrlWithKey = `${downloadLink}&key=${process.env.GEMINI_API_KEY}`;
+    const videoUrlWithKey = `${downloadLink}&key=${localStorage.getItem('GEMINI_API_KEY')}`;
     
     // Fetch the video as a blob
     const videoResponse = await fetch(videoUrlWithKey);

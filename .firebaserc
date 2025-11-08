@@ -1,0 +1,16 @@
+{
+  "projects": {},
+  "targets": {
+    "gemini-vibeathon": {
+      "hosting": {
+        "gemini-academy-teacher": [
+          "gemini-academy-teacher"
+        ],
+        "gemini-academy-student": [
+          "gemini-academy-student"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

@@ -31,7 +31,7 @@ export const listGrades = async (): Promise<Grade[]> => {
         name: formatTitle(folderName),
       };
     });
-    return grades.filter(g => g.name);
+    return grades.filter(g => g.name).sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
   } catch (error) {
     console.error("Error fetching grades:", error);
     throw error;
@@ -57,7 +57,7 @@ export const listLecturesByGrade = async (gradeFolder: string): Promise<Lecture[
         });
 
         const lectures = await Promise.all(lecturePromises);
-        return lectures.filter((lecture): lecture is Lecture => lecture !== null);
+        return lectures.filter((lecture): lecture is Lecture => lecture !== null).sort((a, b) => a.title.localeCompare(b.title));
     } catch (error) {
         console.error(`Error fetching lectures for grade ${gradeFolder}:`, error);
         throw error;

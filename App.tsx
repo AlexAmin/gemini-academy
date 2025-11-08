@@ -42,8 +42,13 @@ export default function App() {
             const hasKey = await window.aistudio.hasSelectedApiKey();
             setIsApiKeySelected(hasKey);
         } else {
-             // For local dev or if aistudio is not available
-            setIsApiKeySelected(!!process.env.GEMINI_API_KEY);
+            // Check localStorage for saved API key
+            const savedApiKey = localStorage.getItem('GEMINI_API_KEY');
+            if (savedApiKey) {
+                setIsApiKeySelected(true);
+            } else {
+                setIsApiKeySelected(false);
+            }
         }
     }, []);
 
@@ -70,10 +75,22 @@ export default function App() {
         if (window.aistudio && typeof window.aistudio.openSelectKey === 'function') {
             await window.aistudio.openSelectKey();
             // Assume success and re-check, giving user immediate feedback
-            setIsApiKeySelected(true); 
+            setIsApiKeySelected(true);
             checkApiKey(); // Verify in background
         } else {
-            alert("API key selection is not available in this environment.");
+            // Check if already set
+            const existingKey = localStorage.getItem('GEMINI_API_KEY');
+            if (existingKey) {
+                const clearKey = window.confirm('An API key is already saved. Would you like to replace it?');
+                if (!clearKey) return;
+            }
+
+            // Prompt for new API key
+            const apiKey = window.prompt('Please enter your Gemini API Key:');
+            if (apiKey && apiKey.trim()) {
+                localStorage.setItem('GEMINI_API_KEY', apiKey.trim());
+                setIsApiKeySelected(true);
+            }
         }
     };
     
@@ -188,7 +205,7 @@ export default function App() {
     };
 
     const totalSlides = generatedAssets && lecturePlan
-        ? 1 + lecturePlan.content_and_themes.length + (generatedAssets.quiz?.questions.length || 0)
+        ? 1 + lecturePlan.content_and_themes.length + (generatedAssets.quiz?.questions.length || 0) + 1 // +1 for completion slide
         : 0;
 
     const goToNextSlide = () => {
@@ -543,6 +560,69 @@ export default function App() {
                         color: white;
                     }
 
+                    /* Completion Slide */
+                    .completion-slide {
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        padding: 3rem;
+                    }
+                    .completion-content {
+                        text-align: center;
+                        color: white;
+                        animation: fadeInUp 1s ease-out;
+                    }
+                    .celebration-icon {
+                        font-size: 6rem;
+                        margin-bottom: 1rem;
+                        animation: bounce 1s infinite;
+                    }
+                    @keyframes bounce {
+                        0%, 100% { transform: translateY(0); }
+                        50% { transform: translateY(-20px); }
+                    }
+                    .completion-title {
+                        font-size: 3.5rem;
+                        font-weight: 700;
+                        margin-bottom: 1rem;
+                        text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                    }
+                    .completion-message {
+                        font-size: 1.5rem;
+                        margin-bottom: 3rem;
+                        opacity: 0.9;
+                    }
+                    .completion-stats {
+                        display: flex;
+                        gap: 3rem;
+                        justify-content: center;
+                        margin-bottom: 3rem;
+                    }
+                    .stat-item {
+                        background: rgba(255,255,255,0.2);
+                        padding: 2rem 3rem;
+                        border-radius: 20px;
+                        backdrop-filter: blur(10px);
+                        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+                    }
+                    .stat-number {
+                        font-size: 3rem;
+                        font-weight: 700;
+                        margin-bottom: 0.5rem;
+                    }
+                    .stat-label {
+                        font-size: 1rem;
+                        opacity: 0.9;
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                    }
+                    .completion-footer {
+                        font-size: 1.2rem;
+                        opacity: 0.8;
+                        font-style: italic;
+                    }
+
                     /* Navigation Buttons */
                     .nav-btn {
                         position: absolute;
@@ -722,7 +802,7 @@ export default function App() {
                                 className="w-16 h-16 rounded-full object-cover border-4 border-indigo-500 shadow-lg"
                             />
                             <div>
-                                <h2 className="text-xl font-bold text-gray-800">Welcome, Teacher!</h2>
+                                <h2 className="text-xl font-bold text-gray-800">Welcome, Alex!</h2>
                                 <p className="text-sm text-gray-500">Ready to create your next lesson</p>
                             </div>
                         </div>
@@ -837,10 +917,10 @@ export default function App() {
                     audioUrl={generatedAssets.audioUrls[themeIndex]}
                     imageUrl={generatedAssets.imageUrls[themeIndex]}
                     slideNumber={slideIndex}
-                    totalSlides={totalSlides - 1}
+                    totalSlides={totalSlides - 2}
                 />
             );
-        } else {
+        } else if (slideIndex < totalSlides - 1) {
             const quizIndex = slideIndex - 1 - lecturePlan.content_and_themes.length;
             const question = generatedAssets.quiz.questions[quizIndex];
             slideComponent = (
@@ -850,6 +930,34 @@ export default function App() {
                     questionNumber={quizIndex + 1}
                     totalQuestions={generatedAssets.quiz.questions.length}
                 />
+            );
+        } else {
+            // Completion slide
+            slideComponent = (
+                <div className="w-full h-full bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center p-8">
+                    <div className="text-center text-white">
+                        <div className="text-8xl mb-6 animate-bounce">🎉</div>
+                        <h1 className="text-5xl md:text-6xl font-bold mb-4 drop-shadow-2xl">
+                            Woohoo! You're Done!
+                        </h1>
+                        <p className="text-2xl mb-8 opacity-90">
+                            Congratulations on completing this lesson!
+                        </p>
+                        <div className="flex gap-8 justify-center mb-8">
+                            <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-2xl">
+                                <div className="text-5xl font-bold mb-2">{lecturePlan.content_and_themes.length}</div>
+                                <div className="text-sm uppercase tracking-wider opacity-90">Topics Covered</div>
+                            </div>
+                            <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-2xl">
+                                <div className="text-5xl font-bold mb-2">{generatedAssets.quiz.questions.length}</div>
+                                <div className="text-sm uppercase tracking-wider opacity-90">Questions Answered</div>
+                            </div>
+                        </div>
+                        <p className="text-xl opacity-80 italic">
+                            Great job learning about {lecturePlan.unit_title}!
+                        </p>
+                    </div>
+                </div>
             );
         }
 
