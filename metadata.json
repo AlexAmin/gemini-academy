@@ -1,0 +1,5 @@
+{
+  "name": "Gemini Academy",
+  "description": "An AI-powered platform to automatically generate complete, multimedia-rich lectures from a structured lesson plan. It creates videos, audio narrations, and quizzes, assembling them into a ready-to-use slideshow.",
+  "requestFramePermissions": []
+}
