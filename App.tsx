@@ -205,7 +205,7 @@ export default function App() {
         setIsPublishing(true);
         setError(null);
 
-        const slideContent = Array.from({ length: totalSlides }, (_, i) => {
+        const slideContent = Array.from({ length: totalSlides + 1 }, (_, i) => {
             if (i === 0) {
                 return `<div class="slide intro-slide">
                           <div class="video-container">
@@ -235,24 +235,43 @@ export default function App() {
                             <audio src="${generatedAssets.audioUrls[i-1]}" controls autoplay></audio>
                           </div>
                         </div>`;
-            } else {
+            } else if (i <= lecturePlan.content_and_themes.length + generatedAssets.quiz.questions.length) {
                 const question = generatedAssets.quiz.questions[i - 1 - lecturePlan.content_and_themes.length];
                 const qNum = i - lecturePlan.content_and_themes.length;
-                return `<div class="slide quiz-slide">
+                return `<div class="slide quiz-slide" data-quiz="true">
                           <div class="quiz-header">
                             <span class="quiz-badge">Quiz Question ${qNum}</span>
                           </div>
                           <h3 class="quiz-question">${question.question}</h3>
                           <ul class="quiz-options">
                             ${question.options.map((opt, idx) => `
-                              <li class="quiz-option" data-correct="${opt === question.answer}">
+                              <li class="quiz-option" data-answer="${opt}" data-correct="${opt === question.answer}">
                                 <span class="option-letter">${String.fromCharCode(65 + idx)}</span>
                                 <span class="option-text">${opt}</span>
                               </li>
                             `).join('')}
                           </ul>
-                          <div class="quiz-answer">
-                            <strong>Correct Answer:</strong> ${question.answer}
+                          <div class="quiz-answer" style="display: none;">
+                            <div class="answer-feedback"></div>
+                          </div>
+                        </div>`;
+            } else {
+                return `<div class="slide completion-slide">
+                          <div class="completion-content">
+                            <div class="celebration-icon">🎉</div>
+                            <h1 class="completion-title">Woohoo! You're Done!</h1>
+                            <p class="completion-message">Congratulations on completing this lesson!</p>
+                            <div class="completion-stats">
+                              <div class="stat-item">
+                                <div class="stat-number">${lecturePlan.content_and_themes.length}</div>
+                                <div class="stat-label">Topics Covered</div>
+                              </div>
+                              <div class="stat-item">
+                                <div class="stat-number">${generatedAssets.quiz.questions.length}</div>
+                                <div class="stat-label">Questions Answered</div>
+                              </div>
+                            </div>
+                            <p class="completion-footer">Great job learning about ${lecturePlan.unit_title}!</p>
                           </div>
                         </div>`;
             }
@@ -448,12 +467,43 @@ export default function App() {
                         align-items: center;
                         gap: 1.5rem;
                         box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-                        transition: transform 0.2s, box-shadow 0.2s;
+                        transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
                         cursor: pointer;
                     }
-                    .quiz-option:hover {
+                    .quiz-option:hover:not(.answered) {
                         transform: translateY(-3px);
                         box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+                    }
+                    .quiz-option.answered {
+                        cursor: default;
+                        opacity: 0.6;
+                    }
+                    .quiz-option.selected.correct {
+                        background: #48bb78;
+                        border: 2px solid #38a169;
+                    }
+                    .quiz-option.selected.correct .option-letter {
+                        background: #38a169;
+                    }
+                    .quiz-option.selected.correct .option-text {
+                        color: white;
+                    }
+                    .quiz-option.selected.incorrect {
+                        background: #f56565;
+                        border: 2px solid #e53e3e;
+                    }
+                    .quiz-option.selected.incorrect .option-letter {
+                        background: #e53e3e;
+                    }
+                    .quiz-option.selected.incorrect .option-text {
+                        color: white;
+                    }
+                    .quiz-option.answered.correct:not(.selected) {
+                        background: #c6f6d5;
+                        border: 2px solid #48bb78;
+                    }
+                    .quiz-option.answered.correct:not(.selected) .option-letter {
+                        background: #48bb78;
                     }
                     .option-letter {
                         background: #667eea;
@@ -467,22 +517,30 @@ export default function App() {
                         font-weight: 700;
                         font-size: 1.2rem;
                         flex-shrink: 0;
+                        transition: background-color 0.3s;
                     }
                     .option-text {
                         color: #2d3748;
                         font-size: 1.1rem;
                         font-weight: 500;
+                        transition: color 0.3s;
                     }
                     .quiz-answer {
                         text-align: center;
-                        background: #48bb78;
-                        color: white;
                         padding: 1rem 2rem;
                         border-radius: 15px;
                         font-size: 1.2rem;
                         max-width: 600px;
                         margin: 0 auto;
-                        box-shadow: 0 5px 15px rgba(72,187,120,0.3);
+                        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                    }
+                    .answer-feedback.correct {
+                        background: #48bb78;
+                        color: white;
+                    }
+                    .answer-feedback.incorrect {
+                        background: #f56565;
+                        color: white;
                     }
 
                     /* Navigation Buttons */
@@ -531,16 +589,97 @@ export default function App() {
                 <script>
                     let current = 0;
                     const slides = document.querySelectorAll('.slide');
+
+                    function resetQuiz(slide) {
+                        if (!slide.dataset.quiz) return;
+
+                        // Reset all options
+                        const options = slide.querySelectorAll('.quiz-option');
+                        options.forEach(option => {
+                            option.classList.remove('answered', 'selected', 'correct', 'incorrect');
+                        });
+
+                        // Hide answer feedback
+                        const answerDiv = slide.querySelector('.quiz-answer');
+                        if (answerDiv) {
+                            answerDiv.style.display = 'none';
+                            answerDiv.querySelector('.answer-feedback').textContent = '';
+                            answerDiv.querySelector('.answer-feedback').className = 'answer-feedback';
+                        }
+                    }
+
+                    function handleQuizAnswer(option, slide) {
+                        // Check if already answered
+                        if (option.classList.contains('answered')) return;
+
+                        const isCorrect = option.dataset.correct === 'true';
+
+                        // Mark all options as answered
+                        const allOptions = slide.querySelectorAll('.quiz-option');
+                        allOptions.forEach(opt => {
+                            opt.classList.add('answered');
+                            if (opt.dataset.correct === 'true') {
+                                opt.classList.add('correct');
+                            }
+                        });
+
+                        // Mark the selected option
+                        option.classList.add('selected');
+                        if (isCorrect) {
+                            option.classList.add('correct');
+                        } else {
+                            option.classList.add('incorrect');
+                        }
+
+                        // Show feedback
+                        const answerDiv = slide.querySelector('.quiz-answer');
+                        const feedbackDiv = answerDiv.querySelector('.answer-feedback');
+                        if (isCorrect) {
+                            feedbackDiv.textContent = '🎉 Correct!';
+                            feedbackDiv.classList.add('correct');
+                        } else {
+                            const correctAnswer = Array.from(allOptions).find(opt => opt.dataset.correct === 'true').dataset.answer;
+                            feedbackDiv.textContent = '❌ Incorrect. The correct answer is: ' + correctAnswer;
+                            feedbackDiv.classList.add('incorrect');
+                        }
+                        answerDiv.style.display = 'block';
+                    }
+
+                    function initQuiz(slide) {
+                        if (!slide.dataset.quiz) return;
+
+                        const options = slide.querySelectorAll('.quiz-option');
+                        options.forEach(option => {
+                            option.addEventListener('click', () => handleQuizAnswer(option, slide));
+                        });
+                    }
+
                     function showSlide(index) {
                         slides.forEach((slide, i) => {
                             slide.classList.toggle('active', i === index);
                             const media = slide.querySelector('video, audio');
                             if (media) {
-                                if (i === index) media.play().catch(e=>console.log("Autoplay blocked"));
-                                else media.pause();
+                                if (i === index) {
+                                    media.play().catch(e=>console.log("Autoplay blocked"));
+                                } else {
+                                    media.pause();
+                                }
+                            }
+
+                            // Reset quiz when navigating away or to it
+                            if (slide.dataset.quiz) {
+                                resetQuiz(slide);
                             }
                         });
                     }
+
+                    // Initialize all quizzes
+                    slides.forEach(slide => {
+                        if (slide.dataset.quiz) {
+                            initQuiz(slide);
+                        }
+                    });
+
                     document.getElementById('nextBtn').addEventListener('click', () => {
                         current = (current + 1) % slides.length;
                         showSlide(current);
