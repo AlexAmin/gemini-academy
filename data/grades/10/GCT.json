@@ -1,0 +1,72 @@
+{
+  "grade": 10,
+  "unit_title": "Global Conflict and Totalitarianism (WWI, WWII, Cold War)",
+  "overview": "The modern period (1750 through the present) is defined by **global conflict and cooperation**, economic growth and collapse, and global independence and connection. This unit focuses on the massive conflicts and ideological struggles—including two world wars and the Cold War—that shaped the twentieth century.",
+  "guiding_questions": [
+    {
+      "category": "World War I and its Aftermath",
+      "questions": [
+        "Why did the Great War become a World War?",
+        "How was World War I a total war?",
+        "Why did the Russian Revolution develop, and how did it become popular?",
+        "What were the consequences of World War I for nations and people?",
+        "How did agreements dating from the World War I and postwar periods impact the map of the Middle East?",
+        "Why does the term 'lost generation' refer to those who lived through or came of age during these years?"
+      ]
+    },
+    {
+      "category": "Totalitarianism and World War II",
+      "questions": [
+        "Why did communism and fascism appeal to Europeans in the 1930s?",
+        "What was totalitarianism, and how was it implemented in similar and different ways in Japan, Germany, Italy, and the Soviet Union?",
+        "Why was the death toll so high during World War II?",
+        "How was the Holocaust carried out?",
+        "How did technology affect World War II?"
+      ]
+    },
+    {
+      "category": "The Cold War and Decolonization",
+      "questions": [
+        "How did the Cold War develop?",
+        "How was the Cold War waged all over the world?",
+        "How did former colonies respond to the Cold War and liberation?",
+        "How and why did the Cold War end?"
+      ]
+    }
+  ],
+  "content_and_themes": [
+    {
+      "theme": "I. World War I and the Dissolution of Empires (1914–1918)",
+      "details": [
+        "The Great War resulted from **nationalist tensions** in Europe and subsequent militarization due to clashes over colonial resources and markets.",
+        "It was a **total war**, mobilizing not only soldiers but also civilians, leading to unprecedented destruction due to technological advancements like the machine gun and high explosives.",
+        "**Genocide** occurred during the war, specifically the Ottoman government’s systematic actions against Armenian citizens, resulting in the elimination of over 1.5 million Armenians.",
+        "The war resulted in the disintegration of the Ottoman, Austro-Hungarian, and Russian empires, leading to new independent states.",
+        "The **Russian Revolution** of 1917 overthrew the Czarist leadership, and the communist Bolsheviks seized power, establishing a political monopoly of the Communist Party.",
+        "The **Treaty of Versailles** required losing powers, especially Germany, to assume responsibility for starting the war and pay large reparations."
+      ]
+    },
+    {
+      "theme": "II. Totalitarianism and the Second World War (1920s–1945)",
+      "details": [
+        "The collapse of the capitalist market system during the Great Depression led to the emergence of political alternatives such as **communism and fascism**.",
+        "**Totalitarianism** is defined as a centralized state that controls all aspects of life through the authoritarian use of violence.",
+        "In the Soviet Union, Joseph Stalin implemented Five-Year Plans for state-run development, achieving economic growth at a **huge human cost**, including the famine in Ukraine and political purges.",
+        "**Fascist** regimes in Italy and Germany were nationalist and militaristic, establishing state-directed economies and rearming their militaries.",
+        "WWII was caused by the expansionist drives of Germany, Italy, and Japan. The war involved **highly mechanized warfare** and massive destruction of military and civilian populations.",
+        "The war’s most severe consequence was the **Holocaust**, the Nazi policy of racial purity transformed into the Final Solution, resulting in the murder of six million Jewish civilians and millions of others."
+      ]
+    },
+    {
+      "theme": "III. The Cold War and Postwar Global Developments (1945–Present)",
+      "details": [
+        "World War II accelerated **decolonization** and the emergence of the **Cold War**, characterized by escalating hostility between the U.S. and the Soviet Union.",
+        "The U.S. implemented the policy of **Containment** to prevent the spread of communism, deploying tools like the **Marshall Plan** and the **Truman Doctrine**.",
+        "The competition for influence led to the formation of military alliances, including **NATO** and the **Warsaw Pact**, and proxy wars globally, particularly in Southeast Asia (Korean War, Vietnam War), Cuba, and Africa.",
+        "The rise of **Mao Tse-tung** in China (1949) complicated the bipolar world, leading to upheavals like the Great Leap Forward and the Cultural Revolution.",
+        "The Soviet Union ultimately collapsed due to **internal weaknesses**, including a command economy and overburdened military commitments (like the war in Afghanistan), and growing resistance from dissidents.",
+        "The postwar period saw the establishment of international organizations like the **United Nations** (U.N.) and the adoption of the **Universal Declaration of Human Rights** (1948), though its limits were often tested by the convention of state sovereignty."
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { LecturePlan, GeneratedAssets, Quiz, QuizQuestion, GenerationStatus } from './types';
 import { fetchLecturePlan, fetchInitialImage, uploadFileToFirebase, base64ToBlob } from './services/firebaseService';
-import { generateAudio, generateVideo, generateQuiz } from './services/geminiService';
+import { generateAudio, generateVideo, generateQuiz, generateImage, generateImageFromImage } from './services/geminiService';
 import { Slide } from './components/Slide';
 import { QuizSlide } from './components/QuizSlide';
 import { Spinner } from './components/Spinner';
@@ -43,7 +43,7 @@ export default function App() {
             setIsApiKeySelected(hasKey);
         } else {
              // For local dev or if aistudio is not available
-            setIsApiKeySelected(!!process.env.API_KEY);
+            setIsApiKeySelected(!!process.env.GEMINI_API_KEY);
         }
     }, []);
 
@@ -117,8 +117,6 @@ export default function App() {
             }
             setLecturePlan(plan);
 
-            setStatus({ stage: '2/4', message: 'Generating multimedia assets...' });
-
             let initialImageBase64: string;
             if (initialImageFile) {
                 initialImageBase64 = await fileToB64(initialImageFile);
@@ -126,9 +124,17 @@ export default function App() {
                 initialImageBase64 = await fetchInitialImage(INITIAL_IMAGE_URL);
             }
 
-            const [audioBase64s, videoBlob, quizData] = await Promise.all([
+            setStatus({ stage: '2/4', message: 'Creating contextual scene...' });
+            // Generate a contextual image of the person for the video first frame
+            const contextualImagePrompt = `Transform this person's image into a scene that represents the following educational topic: ${plan.unit_title}. ${plan.overview}. Keep the person recognizable but place them in an educational or thematic context related to the topic. Style: professional, educational, engaging.`;
+            const contextualImageBlob = await generateImageFromImage(initialImageBase64, contextualImagePrompt);
+            const contextualImageBase64 = await fileToB64(contextualImageBlob);
+
+            setStatus({ stage: '3/5', message: 'Generating multimedia assets...' });
+            const [audioBase64s, imageBlobs, videoBlob, quizData] = await Promise.all([
                 Promise.all(plan.content_and_themes.map(theme => generateAudio(theme.details))),
-                generateVideo(`${plan.overview} ${plan.guiding_questions.join(' ')}`, initialImageBase64).catch(err => {
+                Promise.all(plan.content_and_themes.map(theme => generateImage(`${theme.theme}: ${theme.details}`))),
+                generateVideo(`${plan.overview} ${plan.guiding_questions.join(' ')}`, contextualImageBase64).catch(err => {
                     if (err.message.includes("Requested entity was not found.")) {
                         setIsApiKeySelected(false);
                         throw new Error("Your API key is invalid or expired. Please select a new key and try again.");
@@ -137,27 +143,40 @@ export default function App() {
                 }),
                 generateQuiz(plan.content_and_themes.map(t => t.details).join('\n\n'), 5),
             ]);
-            
-            setStatus({ stage: '3/4', message: 'Uploading media to cloud...' });
+
+            setStatus({ stage: '4/5', message: 'Uploading media to cloud...' });
             const videoPath = `media/${kebabCase(plan.unit_title)}-video.mp4`;
-            
+
             const audioUploadPromises = audioBase64s.map((base64, i) => {
-                const audioBlob = base64ToBlob(base64, 'audio/mpeg');
-                const audioPath = `media/${kebabCase(plan.unit_title)}-audio-${i}.mp3`;
+                const audioBlob = base64ToBlob(base64, 'audio/wav');
+                const audioPath = `media/${kebabCase(plan.unit_title)}-audio-${i}.wav`;
                 return uploadFileToFirebase(audioBlob, audioPath);
+            });
+
+            const imageUploadPromises = imageBlobs.map((blob, i) => {
+                const imagePath = `media/${kebabCase(plan.unit_title)}-image-${i}.png`;
+                return uploadFileToFirebase(blob, imagePath);
             });
 
             const videoUploadPromise = uploadFileToFirebase(videoBlob, videoPath);
 
-            const [uploadedVideoUrl, ...uploadedAudioUrls] = await Promise.all([videoUploadPromise, ...audioUploadPromises]);
+            const [uploadedVideoUrl, ...rest] = await Promise.all([
+                videoUploadPromise,
+                ...audioUploadPromises,
+                ...imageUploadPromises
+            ]);
+
+            const uploadedAudioUrls = rest.slice(0, audioBase64s.length);
+            const uploadedImageUrls = rest.slice(audioBase64s.length);
 
             const assets: GeneratedAssets = {
                 videoUrl: uploadedVideoUrl,
                 audioUrls: uploadedAudioUrls,
+                imageUrls: uploadedImageUrls,
                 quiz: quizData,
             };
 
-            setStatus({ stage: '4/4', message: 'Ready!' });
+            setStatus({ stage: '5/5', message: 'Ready!' });
             setGeneratedAssets(assets);
             
         } catch (err: any) {
@@ -188,22 +207,53 @@ export default function App() {
 
         const slideContent = Array.from({ length: totalSlides }, (_, i) => {
             if (i === 0) {
-                return `<div class="slide"><video src="${generatedAssets.videoUrl}" controls autoplay muted loop class="w-full h-full object-cover"></video></div>`;
+                return `<div class="slide intro-slide">
+                          <div class="video-container">
+                            <video src="${generatedAssets.videoUrl}" controls autoplay muted loop></video>
+                          </div>
+                          <div class="intro-overlay">
+                            <h1 class="intro-title">${lecturePlan.unit_title}</h1>
+                          </div>
+                        </div>`;
             } else if (i <= lecturePlan.content_and_themes.length) {
                 const theme = lecturePlan.content_and_themes[i - 1];
-                return `<div class="slide">
-                          <h2 class="text-4xl font-bold mb-4">${theme.theme}</h2>
-                          <div class="prose prose-invert max-w-none">${markdownToHtml(theme.details)}</div>
-                          <audio src="${generatedAssets.audioUrls[i-1]}" controls autoplay class="mt-auto"></audio>
+                const imageUrl = generatedAssets.imageUrls[i - 1];
+                return `<div class="slide content-slide">
+                          <div class="slide-header">
+                            <span class="slide-number">Slide ${i} of ${totalSlides - 1}</span>
+                            <h2 class="slide-title">${theme.theme}</h2>
+                          </div>
+                          <div class="slide-body">
+                            <div class="slide-image">
+                              <img src="${imageUrl}" alt="${theme.theme}" />
+                            </div>
+                            <div class="slide-content">
+                              ${markdownToHtml(theme.details)}
+                            </div>
+                          </div>
+                          <div class="slide-footer">
+                            <audio src="${generatedAssets.audioUrls[i-1]}" controls autoplay></audio>
+                          </div>
                         </div>`;
             } else {
                 const question = generatedAssets.quiz.questions[i - 1 - lecturePlan.content_and_themes.length];
-                return `<div class="slide">
-                          <h3 class="text-3xl font-semibold mb-6">${question.question}</h3>
-                          <ul class="space-y-4">
-                            ${question.options.map(opt => `<li>${opt}</li>`).join('')}
+                const qNum = i - lecturePlan.content_and_themes.length;
+                return `<div class="slide quiz-slide">
+                          <div class="quiz-header">
+                            <span class="quiz-badge">Quiz Question ${qNum}</span>
+                          </div>
+                          <h3 class="quiz-question">${question.question}</h3>
+                          <ul class="quiz-options">
+                            ${question.options.map((opt, idx) => `
+                              <li class="quiz-option" data-correct="${opt === question.answer}">
+                                <span class="option-letter">${String.fromCharCode(65 + idx)}</span>
+                                <span class="option-text">${opt}</span>
+                              </li>
+                            `).join('')}
                           </ul>
-                          <p class="mt-6 font-bold">Correct Answer: ${question.answer}</p>
+                          <div class="quiz-answer">
+                            <strong>Correct Answer:</strong> ${question.answer}
+                          </div>
                         </div>`;
             }
         }).join('');
@@ -216,16 +266,260 @@ export default function App() {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>${lecturePlan.unit_title}</title>
                 <script src="https://cdn.tailwindcss.com"></script>
+                <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
                 <style>
-                    body { background-color: #0f172a; color: white; font-family: sans-serif; }
-                    .slide-container { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
-                    .slide { display: none; flex-direction: column; padding: 2rem; box-sizing: border-box; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-                    .slide.active { display: flex; }
-                    .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; padding: 1rem; cursor: pointer; z-index: 10; border-radius: 9999px; }
-                    #prevBtn { left: 1rem; }
-                    #nextBtn { right: 1rem; }
-                    .prose { color: #d1d5db; }
-                    .prose h2 { font-size: 2.25rem; line-height: 2.5rem; }
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body {
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        font-family: 'Poppins', sans-serif;
+                        overflow: hidden;
+                    }
+                    .slide-container {
+                        position: relative;
+                        width: 100vw;
+                        height: 100vh;
+                        overflow: hidden;
+                    }
+                    .slide {
+                        display: none;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: white;
+                        opacity: 0;
+                        transition: opacity 0.5s ease-in-out;
+                    }
+                    .slide.active {
+                        display: flex;
+                        opacity: 1;
+                    }
+
+                    /* Intro Slide */
+                    .intro-slide {
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        position: relative;
+                    }
+                    .video-container {
+                        width: 80%;
+                        max-width: 900px;
+                        border-radius: 20px;
+                        overflow: hidden;
+                        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                    }
+                    .video-container video {
+                        width: 100%;
+                        height: auto;
+                        display: block;
+                    }
+                    .intro-overlay {
+                        position: absolute;
+                        top: 10%;
+                        width: 100%;
+                        text-align: center;
+                    }
+                    .intro-title {
+                        font-size: 3.5rem;
+                        font-weight: 700;
+                        color: white;
+                        text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                        animation: fadeInUp 1s ease-out;
+                    }
+
+                    /* Content Slide */
+                    .content-slide {
+                        flex-direction: column;
+                        padding: 2rem 3rem;
+                        background: linear-gradient(to bottom right, #ffecd2 0%, #fcb69f 100%);
+                    }
+                    .slide-header {
+                        margin-bottom: 1.5rem;
+                    }
+                    .slide-number {
+                        display: inline-block;
+                        background: #667eea;
+                        color: white;
+                        padding: 0.5rem 1rem;
+                        border-radius: 20px;
+                        font-size: 0.9rem;
+                        font-weight: 600;
+                    }
+                    .slide-title {
+                        font-size: 2.5rem;
+                        font-weight: 700;
+                        color: #2d3748;
+                        margin-top: 1rem;
+                    }
+                    .slide-body {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        gap: 2rem;
+                        flex: 1;
+                        overflow: hidden;
+                    }
+                    .slide-image {
+                        border-radius: 15px;
+                        overflow: hidden;
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                    }
+                    .slide-image img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                    .slide-content {
+                        background: white;
+                        padding: 2rem;
+                        border-radius: 15px;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        overflow-y: auto;
+                        color: #2d3748;
+                        font-size: 1.1rem;
+                        line-height: 1.8;
+                    }
+                    .slide-content h1, .slide-content h2, .slide-content h3 {
+                        color: #667eea;
+                        margin-bottom: 0.5rem;
+                    }
+                    .slide-content p {
+                        margin-bottom: 1rem;
+                    }
+                    .slide-content ul, .slide-content ol {
+                        margin-left: 1.5rem;
+                        margin-bottom: 1rem;
+                    }
+                    .slide-footer {
+                        margin-top: 1.5rem;
+                        text-align: center;
+                    }
+                    .slide-footer audio {
+                        width: 100%;
+                        max-width: 600px;
+                        border-radius: 30px;
+                    }
+
+                    /* Quiz Slide */
+                    .quiz-slide {
+                        flex-direction: column;
+                        padding: 3rem 4rem;
+                        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+                        justify-content: center;
+                    }
+                    .quiz-header {
+                        text-align: center;
+                        margin-bottom: 2rem;
+                    }
+                    .quiz-badge {
+                        display: inline-block;
+                        background: #ff6b6b;
+                        color: white;
+                        padding: 0.75rem 2rem;
+                        border-radius: 25px;
+                        font-size: 1.2rem;
+                        font-weight: 700;
+                        box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+                    }
+                    .quiz-question {
+                        font-size: 2rem;
+                        font-weight: 700;
+                        color: #2d3748;
+                        text-align: center;
+                        margin-bottom: 2rem;
+                        padding: 0 2rem;
+                    }
+                    .quiz-options {
+                        list-style: none;
+                        max-width: 800px;
+                        margin: 0 auto 2rem;
+                    }
+                    .quiz-option {
+                        background: white;
+                        margin-bottom: 1rem;
+                        padding: 1.5rem;
+                        border-radius: 15px;
+                        display: flex;
+                        align-items: center;
+                        gap: 1.5rem;
+                        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                        transition: transform 0.2s, box-shadow 0.2s;
+                        cursor: pointer;
+                    }
+                    .quiz-option:hover {
+                        transform: translateY(-3px);
+                        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+                    }
+                    .option-letter {
+                        background: #667eea;
+                        color: white;
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: 700;
+                        font-size: 1.2rem;
+                        flex-shrink: 0;
+                    }
+                    .option-text {
+                        color: #2d3748;
+                        font-size: 1.1rem;
+                        font-weight: 500;
+                    }
+                    .quiz-answer {
+                        text-align: center;
+                        background: #48bb78;
+                        color: white;
+                        padding: 1rem 2rem;
+                        border-radius: 15px;
+                        font-size: 1.2rem;
+                        max-width: 600px;
+                        margin: 0 auto;
+                        box-shadow: 0 5px 15px rgba(72,187,120,0.3);
+                    }
+
+                    /* Navigation Buttons */
+                    .nav-btn {
+                        position: absolute;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background: rgba(255,255,255,0.9);
+                        color: #667eea;
+                        border: none;
+                        padding: 1.2rem 1.5rem;
+                        cursor: pointer;
+                        z-index: 10;
+                        border-radius: 50%;
+                        font-size: 1.5rem;
+                        font-weight: 700;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                        transition: all 0.3s;
+                    }
+                    .nav-btn:hover {
+                        background: white;
+                        transform: translateY(-50%) scale(1.1);
+                        box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+                    }
+                    #prevBtn { left: 2rem; }
+                    #nextBtn { right: 2rem; }
+
+                    @keyframes fadeInUp {
+                        from {
+                            opacity: 0;
+                            transform: translateY(30px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
                 </style>
             </head>
             <body>
@@ -263,7 +557,8 @@ export default function App() {
     
         try {
             const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
-            const filePath = `lectures/${kebabCase(lecturePlan.unit_title)}.html`;
+            const lectureId = lecturePlan.lecture_id || kebabCase(lecturePlan.unit_title);
+            const filePath = `lectures/${lecturePlan.grade}/${lectureId}.html`;
             const finalUrl = await uploadFileToFirebase(htmlBlob, filePath);
             setFinalLectureUrl(finalUrl);
             setPublishedFilePath(filePath);
@@ -278,42 +573,88 @@ export default function App() {
     const renderContent = () => {
         if (!generatedAssets || !lecturePlan) {
             return (
-                <div className="text-center">
-                    <h1 className="text-4xl md:text-5xl font-bold text-sky-400">Gemini Academy</h1>
-                    <p className="mt-4 text-lg text-slate-300 max-w-2xl mx-auto">Transform your lesson plans into engaging multimedia presentations. Click generate to begin.</p>
-                    <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
+                <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl p-8 md:p-12">
+                    {/* User Profile Header */}
+                    <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-200">
+                        <div className="flex items-center gap-4">
+                            <img
+                                src={INITIAL_IMAGE_URL}
+                                alt="Teacher Profile"
+                                className="w-16 h-16 rounded-full object-cover border-4 border-indigo-500 shadow-lg"
+                            />
+                            <div>
+                                <h2 className="text-xl font-bold text-gray-800">Welcome, Teacher!</h2>
+                                <p className="text-sm text-gray-500">Ready to create your next lesson</p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={handleSelectKey}
+                            className="flex items-center justify-center gap-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-semibold py-2 px-4 rounded-lg transition-colors"
+                        >
+                            <KeyIcon />
+                            <span className="hidden sm:inline">{isApiKeySelected ? "API Key Connected" : "Connect API Key"}</span>
+                        </button>
+                    </div>
+
+                    {/* Main Content */}
+                    <div className="text-center mb-8">
+                        <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
+                            Gemini Academy
+                        </h1>
+                        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                            Transform your lesson plans into engaging multimedia presentations with AI-powered audio, images, and video.
+                        </p>
+                    </div>
+
+                    {/* Generate Button */}
+                    <div className="flex justify-center mb-8">
                         <button
                             onClick={handleGenerateLecture}
                             disabled={isLoading || !isApiKeySelected}
-                            className="w-full sm:w-auto bg-sky-500 hover:bg-sky-600 disabled:bg-sky-800 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105"
+                            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all transform hover:scale-105 disabled:transform-none text-lg"
                         >
-                            Generate Lecture
-                        </button>
-                        <button 
-                            onClick={handleSelectKey}
-                            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105"
-                        >
-                            <KeyIcon />
-                            {isApiKeySelected ? "API Key Selected" : "Select API Key"}
+                            ✨ Generate Lecture
                         </button>
                     </div>
-                     {!isApiKeySelected && <p className="mt-3 text-sm text-yellow-400">An API key is required to generate videos. <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noopener noreferrer" className="underline hover:text-yellow-300">Billing info</a>.</p>}
-                    {error && <div className="mt-6 bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-lg max-w-2xl mx-auto">{error}</div>}
 
-                    <div className="mt-6 border-t border-slate-700/50 pt-6 max-w-md mx-auto">
-                        <h3 className="text-base font-semibold text-slate-400 mb-4">Optional Overrides</h3>
+                    {!isApiKeySelected && (
+                        <div className="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 rounded">
+                            <p className="text-sm text-amber-800">
+                                <strong>API Key Required:</strong> Connect your API key to generate videos.
+                                <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noopener noreferrer" className="underline hover:text-amber-900 ml-1">
+                                    Learn more
+                                </a>
+                            </p>
+                        </div>
+                    )}
+
+                    {error && (
+                        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
+                            <p className="text-sm text-red-800">{error}</p>
+                        </div>
+                    )}
+
+                    {/* Optional Overrides */}
+                    <div className="border-t border-gray-200 pt-6">
+                        <h3 className="text-base font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            Optional: Customize Your Lesson
+                        </h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
-                                <label htmlFor="json-upload" className="w-full flex items-center justify-center gap-2 bg-slate-800/50 hover:bg-slate-700/50 text-slate-300 font-bold py-2 px-3 rounded-lg shadow-sm transition-colors cursor-pointer text-sm">
+                                <label htmlFor="json-upload" className="w-full flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium py-3 px-4 rounded-lg border-2 border-gray-200 hover:border-indigo-300 transition-colors cursor-pointer">
                                     <DocumentIcon />
-                                    <span className="truncate">{lecturePlanFile ? lecturePlanFile.name : 'Lesson Plan (.json)'}</span>
+                                    <span className="truncate text-sm">{lecturePlanFile ? lecturePlanFile.name : 'Upload Lesson Plan (.json)'}</span>
                                 </label>
                                 <input id="json-upload" type="file" className="hidden" accept=".json" onChange={handleLectureFileChange} />
                             </div>
                             <div>
-                                <label htmlFor="image-upload" className="w-full flex items-center justify-center gap-2 bg-slate-800/50 hover:bg-slate-700/50 text-slate-300 font-bold py-2 px-3 rounded-lg shadow-sm transition-colors cursor-pointer text-sm">
+                                <label htmlFor="image-upload" className="w-full flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium py-3 px-4 rounded-lg border-2 border-gray-200 hover:border-indigo-300 transition-colors cursor-pointer">
                                     <ImageIcon />
-                                    <span className="truncate">{initialImageFile ? initialImageFile.name : 'Start Image (.jpg)'}</span>
+                                    <span className="truncate text-sm">{initialImageFile ? initialImageFile.name : 'Upload Your Photo (.jpg)'}</span>
                                 </label>
                                 <input id="image-upload" type="file" className="hidden" accept="image/jpeg,image/png" onChange={handleImageFileChange} />
                             </div>
@@ -328,8 +669,23 @@ export default function App() {
 
         if (slideIndex === 0) {
             slideComponent = (
-                <div className="w-full h-full bg-black flex items-center justify-center">
-                    <video key={generatedAssets.videoUrl} src={generatedAssets.videoUrl} controls autoPlay muted loop className="w-full h-full object-contain" />
+                <div className="w-full h-full bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center relative p-8">
+                    <div className="absolute top-12 left-0 right-0 text-center z-10">
+                        <h1 className="text-5xl md:text-6xl font-bold text-white drop-shadow-2xl animate-fade-in">
+                            {lecturePlan.unit_title}
+                        </h1>
+                    </div>
+                    <div className="w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl">
+                        <video
+                            key={generatedAssets.videoUrl}
+                            src={generatedAssets.videoUrl}
+                            controls
+                            autoPlay
+                            muted
+                            loop
+                            className="w-full h-auto"
+                        />
+                    </div>
                 </div>
             );
         } else if (slideIndex > 0 && slideIndex <= lecturePlan.content_and_themes.length) {
@@ -340,6 +696,9 @@ export default function App() {
                     title={theme.theme}
                     content={markdownToHtml(theme.details)}
                     audioUrl={generatedAssets.audioUrls[themeIndex]}
+                    imageUrl={generatedAssets.imageUrls[themeIndex]}
+                    slideNumber={slideIndex}
+                    totalSlides={totalSlides - 1}
                 />
             );
         } else {
@@ -347,6 +706,7 @@ export default function App() {
             const question = generatedAssets.quiz.questions[quizIndex];
             slideComponent = (
                 <QuizSlide
+                    key={slideIndex}
                     question={question}
                     questionNumber={quizIndex + 1}
                     totalQuestions={generatedAssets.quiz.questions.length}
@@ -355,38 +715,38 @@ export default function App() {
         }
 
         return (
-            <div className="w-full h-full flex flex-col">
-                <div className="flex-grow relative rounded-lg overflow-hidden shadow-2xl bg-slate-800/50 backdrop-blur-sm">
+            <div className="w-full h-full flex flex-col bg-white rounded-2xl shadow-2xl p-4">
+                <div className="flex-grow relative rounded-xl overflow-hidden shadow-lg">
                    {slideComponent}
                 </div>
-                <div className="flex-shrink-0 flex items-center justify-between p-4 mt-2">
-                    <button onClick={goToPrevSlide} disabled={currentSlide === 0} className="p-3 rounded-full bg-slate-700/50 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"><ArrowLeftIcon /></button>
-                    <span className="text-slate-300 font-medium">Slide {currentSlide + 1} / {totalSlides}</span>
-                    <button onClick={goToNextSlide} disabled={currentSlide === totalSlides - 1} className="p-3 rounded-full bg-slate-700/50 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"><ArrowRightIcon /></button>
+                <div className="flex-shrink-0 flex items-center justify-between p-4 mt-2 bg-gray-50 rounded-lg">
+                    <button onClick={goToPrevSlide} disabled={currentSlide === 0} className="p-3 rounded-full bg-indigo-100 hover:bg-indigo-200 text-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors disabled:bg-gray-200"><ArrowLeftIcon /></button>
+                    <span className="text-gray-700 font-semibold">Slide {currentSlide + 1} / {totalSlides}</span>
+                    <button onClick={goToNextSlide} disabled={currentSlide === totalSlides - 1} className="p-3 rounded-full bg-indigo-100 hover:bg-indigo-200 text-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors disabled:bg-gray-200"><ArrowRightIcon /></button>
                 </div>
-                 <div className="text-center pb-4">
+                 <div className="text-center pb-2 pt-4">
                      {finalLectureUrl ? (
-                         <div className="bg-slate-800/50 p-4 rounded-lg inline-flex flex-col items-center gap-3">
-                             <p className="font-bold text-green-400">🎉 Lecture Published!</p>
+                         <div className="bg-green-50 border-2 border-green-200 p-4 rounded-xl inline-flex flex-col items-center gap-3">
+                             <p className="font-bold text-green-700 text-lg">🎉 Lecture Published Successfully!</p>
                              {publishedFilePath && (
-                                <p className="text-sm text-slate-400">
-                                    Saved to: <code className="bg-slate-700 px-2 py-1 rounded-md text-xs font-mono">{publishedFilePath}</code>
+                                <p className="text-sm text-gray-600">
+                                    Saved to: <code className="bg-white px-3 py-1 rounded-md text-xs font-mono border border-gray-200">{publishedFilePath}</code>
                                 </p>
                              )}
-                             <a 
+                             <a
                                  href={finalLectureUrl}
-                                 target="_blank" 
+                                 target="_blank"
                                  rel="noopener noreferrer"
-                                 className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors"
+                                 className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors shadow-md"
                              >
                                  <LinkIcon /> View Your Lecture
                              </a>
                          </div>
                      ) : (
-                         <button 
+                         <button
                              onClick={handlePublishLecture}
                              disabled={isPublishing}
-                             className="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-800 text-white font-bold py-2 px-5 rounded-lg shadow-md transition-transform transform hover:scale-105"
+                             className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all transform hover:scale-105"
                          >
                              {isPublishing ? (
                                 <>
@@ -410,13 +770,13 @@ export default function App() {
     };
 
     return (
-        <main className="min-h-screen w-full bg-slate-900 text-white flex items-center justify-center p-4 md:p-8" style={{minHeight: 'max(100vh, 720px)'}}>
-            <div className="w-full h-full max-w-6xl aspect-video flex items-center justify-center">
+        <main className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4 md:p-8" style={{minHeight: 'max(100vh, 720px)'}}>
+            <div className="w-full h-full max-w-6xl flex items-center justify-center">
                 {isLoading ? (
-                    <div className="text-center">
+                    <div className="text-center bg-white rounded-2xl shadow-2xl p-12 max-w-md">
                         <Spinner />
-                        <h2 className="text-2xl font-semibold mt-6 text-sky-300">{status.stage} - {status.message}</h2>
-                        <p className="text-slate-400 mt-2">{displayMessage}</p>
+                        <h2 className="text-2xl font-semibold mt-6 text-indigo-700">{status.stage} - {status.message}</h2>
+                        <p className="text-gray-600 mt-2">{displayMessage}</p>
                     </div>
                 ) : (
                     renderContent()

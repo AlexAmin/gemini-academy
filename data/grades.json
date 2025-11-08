@@ -1,0 +1,88 @@
+The following JSON array summarizes the content and themes for Kindergarten through Grade Twelve as detailed in the sources, primarily drawing from the *History–Social Science Framework for California Public Schools*.
+
+[
+  {
+    "grade": "Kindergarten",
+    "theme": "Learning and Working Now and Long Ago",
+    "summary": "Students are introduced to basic spatial, temporal, and causal relationships, emphasizing geographic and historical connections between the world today and long ago. Topics include exploring good citizenship, rules, working together, national and state symbols, different types of jobs and work in the community, and the geography of the neighborhood.",
+    "chapter_reference": "Chapter 3"
+  },
+  {
+    "grade": "Grade One",
+    "theme": "A Child’s Place in Time and Space",
+    "summary": "Students examine the geographic and economic aspects of life in their own neighborhoods and compare them to those of people long ago. They study rights and responsibilities, cooperation, cultural diversity, and American symbols/traditions. Beginning economic concepts, such as the exchange of goods and services for money, and the understanding that choices have consequences, are introduced.",
+    "chapter_reference": "Chapter 4"
+  },
+  {
+    "grade": "Grade Two",
+    "theme": "People, Places, and Environments",
+    "summary": "Students develop a sense of history through the study of the family and compare their daily lives with those of families in the past. Geographic learning focuses on absolute and relative locations of people, places, and environments, requiring map skills such as using a simple letter–number grid system. Economic literacy is developed through appreciation of those who supply goods and services, particularly food, and basic concepts of human wants, scarcity, and choice.",
+    "chapter_reference": "Chapter 5 (implied structure)"
+  },
+  {
+    "grade": "Grade Three",
+    "theme": "Continuity and Change in the Local Region",
+    "summary": "Students study local history and regional geography. They develop economic reasoning skills related to their local region, including trade-offs, cost-benefit evaluation, and the importance of education in developing human capital. Students learn about the legislative, executive, and judicial branches, with an emphasis on local government, and the roles of American heroes.",
+    "chapter_reference": "Chapter 6 (implied structure)"
+  },
+  {
+    "grade": "Grade Four",
+    "theme": "California: A Changing State",
+    "summary": "The focus is on California history, emphasizing its geography, diverse immigration waves starting from pre-Columbian times, economic energy, and rapid growth. Students learn geographic features, including the use of latitude and longitude, and compare the structures, functions, and powers of local, state (California Constitution), and federal governments.",
+    "chapter_reference": "Chapter 7 (implied structure)"
+  },
+  {
+    "grade": "Grade Five",
+    "theme": "United States History and Geography: Making a New Nation",
+    "summary": "The content is expansive, covering the human and physical geography of the United States, including American Indians, colonial life, and the nation’s foundational documents. Students study the debate over ratification and the addition of the Bill of Rights, analyzing sources related to the development of the U.S. Constitution.",
+    "chapter_reference": "Chapter 8 (implied structure)"
+  },
+  {
+    "grade": "Grade Six",
+    "theme": "World History and Geography: Ancient Civilizations",
+    "summary": "Students learn about earliest humans, the development of tools, agriculture, and the emergence of civilizations in Mesopotamia, Egypt, ancient Israel, the Indus River valley, China, Mesoamerica, and the Mediterranean basin. The course provides opportunities to grapple with geography, political systems, and civic engagement, practicing history as an interpretive discipline.",
+    "chapter_reference": "Chapter 10 (implied structure)"
+  },
+  {
+    "grade": "Grade Seven",
+    "theme": "World History and Geography: Medieval and Early Modern Times",
+    "summary": "The curriculum covers social, cultural, and technological changes from A.D. 500–1789 across Europe, Africa, and Asia. Key studies include the Byzantine Empire, Islamic civilizations, China, sub-Saharan Africa, Medieval Japan, Meso-American/Andean civilizations, the Renaissance, Reformation, and the Age of Exploration/Enlightenment.",
+    "chapter_reference": "Chapter 11 (implied structure)"
+  },
+  {
+    "grade": "Grade Eight",
+    "theme": "United States History and Geography: Growth and Conflict",
+    "summary": "Content is substantial, covering parts of three centuries (1750–1914) of U.S. history and geography. Students study the founding of the nation, westward expansion, the institution of slavery, the Civil War, and Reconstruction.",
+    "chapter_reference": "Chapter 12 (implied structure)"
+  },
+  {
+    "grade": "Grade Nine",
+    "theme": "Elective Courses in History–Social Science",
+    "summary": "Students take elective courses over two semesters designed to build upon previous knowledge and prepare for later grades. Examples include: World and Regional Geography, California History, Physical Geography, World Religions, The Humanities, Anthropology, Psychology, Sociology, Ethnic Studies, Law-Related Education, and Financial Literacy.",
+    "chapter_reference": "Chapter 14"
+  },
+  {
+    "grade": "Grade Ten",
+    "theme": "World History, Culture, and Geography: The Modern World",
+    "summary": "The course covers major turning points from the late eighteenth century through the present, focusing on the rise of democratic ideas, global conflict, economic growth/collapse, and the growing complexity of international relations. Key topics include the Enlightenment, political and industrial revolutions, imperialism, and the post–Cold War world.",
+    "chapter_reference": "Chapter 15 (implied structure)"
+  },
+  {
+    "grade": "Grade Eleven",
+    "theme": "United States History and Geography: Continuity and Change in the Twentieth Century",
+    "summary": "Students examine major developments from the late nineteenth century to the present, focusing on the expanding role of the federal government, corporate economy, technology, changes in racial, ethnic, and gender dynamics, and the rise of the U.S. as a major world power.",
+    "chapter_reference": "Chapter 16"
+  },
+  {
+    "grade": "Grade Twelve (Semester 1)",
+    "theme": "Principles of American Democracy",
+    "summary": "Students pursue a deeper understanding of the institutions of American government, comparing systems worldwide and analyzing the history and changing interpretations of the Constitution and the Bill of Rights. They analyze the relationship among federal, state, and local governments.",
+    "chapter_reference": "Chapter 17"
+  },
+  {
+    "grade": "Grade Twelve (Semester 2)",
+    "theme": "Principles of Economics",
+    "summary": "The study focuses on fundamental economic concepts and reasoning, including scarcity, opportunity cost, and incentives. Content includes macroeconomics, labor markets, the aggregate behavior of the U.S. economy, and international trade/globalization.",
+    "chapter_reference": "Chapter 18"
+  }
+]

@@ -2,6 +2,7 @@
 export interface LecturePlan {
   unit_title: string;
   grade: number;
+  lecture_id?: string;
   overview: string;
   guiding_questions: string[];
   content_and_themes: ContentAndTheme[];
@@ -25,6 +26,7 @@ export interface Quiz {
 export interface GeneratedAssets {
   videoUrl: string;
   audioUrls: string[];
+  imageUrls: string[];
   quiz: Quiz;
 }
 

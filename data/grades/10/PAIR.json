@@ -1,0 +1,52 @@
+{
+  "grade": 10,
+  "unit_title": "Political and Industrial Revolutions (1750–1917)",
+  "overview": "The period from 1750 to 1917 focuses on the development of two major trends that continue to influence the modern world: **political revolutions** (democratic revolutions) and **industrial revolutions**. This era highlights the intensification of global history, where people, products, knowledge, and ideas spread globally as never before. These revolutions were rooted in ideas emphasizing the rule of law, reason, individual rights, republicanism, and citizenship, fundamentally transforming global systems of governance and economics.",
+  "guiding_questions": [
+    {
+      "category": "Democratic (Political) Revolutions",
+      "questions": [
+        "How were enlightened ideas a break from the past?",
+        "How did the 'social contract' affect ordinary people?",
+        "What were the consequences of trying to implement political revolutionary ideas in Europe, Latin America, and North America?",
+        "How do the French, American, and Haitian Revolutions compare to one another?",
+        "How is national identity constructed?"
+      ]
+    },
+    {
+      "category": "Industrial Revolutions",
+      "questions": [
+        "Should this era of industrialization be called an Industrial Revolution? Why or why not?",
+        "What were the results of the industrial revolutions? How was technology, and the environment transformed by industrialization?",
+        "How did industrialization affect ordinary people, families, and work?",
+        "Why did socialist ideologies emerge? What were their key tenets?"
+      ]
+    }
+  ],
+  "content_and_themes": [
+    {
+      "theme": "I. Democratic Revolutions: Ideas and Impact",
+      "details": [
+        "Revolutionary political ideas derived from the Enlightenment, emphasizing the rule of law, reason, individual rights, and republicanism, representing a **dramatic break from the authoritarian past** of the 1700s, where divine right and privileged elite status governed society",
+        "Enlightenment thinkers (e.g., Locke, Rousseau, Montesquieu, Adam Smith) developed the notion of the **social contract**, suggesting society members cooperate for mutual benefits and an ordered society",
+        "A key component was the concept of **natural rights** (life, liberty, and property) which reformers argued should apply to all citizens, including equality before the law, challenging traditional privilege",
+        "Civic reformers promoted **representative governments** of limited power to protect natural rights; the consequence was the idea that if a government fails to protect these rights, the people have the right to overthrow it",
+        "Political revolutions erupted in North America, Europe, and Latin America, often led by the educated **bourgeoisie** (middle class), inspired by these liberal, democratic, and constitutional ideologies",
+        "The **Haitian Revolution** was unique because its principles translated directly to the abolition of slavery, unlike the American Revolution where citizenship rights often excluded slaves, women, and many men without property",
+        "The era resulted in the establishment of the **nation-state**, constructed through shared language, religion, literacy, and culture, linking people into a larger national community"
+      ]
+    },
+    {
+      "theme": "II. Industrial Revolutions: Economic and Social Transformation",
+      "details": [
+        "Industrialization represented one of the most dramatic transformations in human history, fundamentally altering global relations, work, settlement patterns, and consumption.",
+        "It shifted the center of the world economy from Asia to Western Europe in the nineteenth century and was **energized by fossil fuels** such as coal, eventually leading to huge increases in productive energy via steam and electrical engines",
+        "Britain was the first nation to industrialize due to factors like navigable rivers, large coal deposits, an available labor pool, and economic/political systems that encouraged innovation.",
+        "The revolution spurred **technological advances** (e.g., inventions by Watt, Whitney, Edison) and scientific improvements (e.g., in medicine and agriculture), leading to a more urban and healthy population",
+        "Industrialization fostered the growth of **corporations**, organizing industries into larger entities that spurred continuous innovations.",
+        "It led to **dramatic urbanization**, as people migrated from rural areas, resulting in overcrowded cities, poor sanitation, and unsafe working conditions, particularly for wage laborers.",
+        "The rigid factory conditions and social inequality led to the growth of unions and the emergence of new ideologies, such as **Socialism** and Marxist concepts of class conflict, challenging the profit interests of capitalists"
+      ]
+    }
+  ]
+}

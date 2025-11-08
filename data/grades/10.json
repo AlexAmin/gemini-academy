@@ -1,0 +1,32 @@
+[
+  {
+    "id": "TWI1750",
+    "grade": 10,
+    "unit_title": "The World in 1750",
+    "summary": "A survey of the premodern world, focusing on geographic organization, trade routes, and the prevalence of centralized dynastic rule (monarchy) and social hierarchy [3, 4]. It introduces the concept of the divine right of kings [4, 5]."
+  },
+  {
+    "id": "PAIR",
+    "grade": 10,
+    "unit_title": "Political and Industrial Revolutions",
+    "summary": "Examines the development of revolutionary political ideals rooted in the Enlightenment and Greco-Roman philosophy, emphasizing concepts like the rule of law, reason, and individual rights [6-8]. It compares major revolutions (English, American, French, Haitian) [9]. It also covers the causes and consequences of the Industrial Revolution, including technological advances, shifts in work patterns, and resulting social inequality and socialist ideologies [10-13]."
+  },
+  {
+    "id": "ICNI",
+    "grade": 10,
+    "unit_title": "Imperialism and Colonialism (New Imperialism)",
+    "summary": "Focuses on the rise of industrial economies and their link to imperial expansion, covering economic and ideological motives (such as ‘civilizing mission’ and racial hierarchy) [14, 15]. It includes case studies in regions like China, India, and Latin America, noting how non-industrial countries responded to pressure or maintained independence [14, 16-18]."
+  },
+  {
+    "id": "GCT",
+    "grade": 10,
+    "unit_title": "Global Conflict and Totalitarianism (WWI, WWII, Cold War)",
+    "summary": "Analyzes the causes and course of World War I, including the concept of 'total war' and postwar disillusionment [19-21]. It examines the rise of totalitarian governments (Fascism, Nazism, Communism) as alternatives to capitalism during the Great Depression [22]. It covers World War II, the Holocaust, and the origins and initial strategies of the Cold War, including containment and proxy wars [23-26]."
+  },
+  {
+    "id": "CWG",
+    "grade": 10,
+    "unit_title": "Contemporary World and Globalization",
+    "summary": "Explores nation-building struggles in the post–Cold War world and how nations organized themselves politically and economically [27]. Topics include subsequent genocides (Cambodia, Rwanda) [28] and the increasing integration of countries through technological, economic, and communications revolutions (globalization) [29, 30]."
+  }
+]
