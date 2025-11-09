@@ -1,29 +1,36 @@
 {
   "grade": 10,
   "unit_title": "The World in 1750",
+  "content_standard": "Students analyze the global political and social structures of the premodern world (ca. 1750) that precede the age of democratic and industrial revolutions.",
+  "overview": "Students begin tenth-grade world history with a survey of the world in 1750, analyzing maps of the major empires, trade routes, and colonies. This period is characterized as the **very end of the premodern world**. The unit sets the stage for the dramatic transition from divine monarchy to the modern nation-state organized around Enlightenment principles.",
   "guiding_questions": [
-    "How were most societies organized in the 1700s?",
-    "Who held power in the 1700s? Why?",
-    "What was the divine right of kings?"
+    {
+      "category": "Political Organization",
+      "questions": [
+        "How were most societies organized in the 1700s?",
+        "Who held power in the 1700s? Why?",
+        "What was the divine right of kings?"
+      ]
+    }
   ],
-  "overview": "Students begin the course with a survey of the world in 1750, analyzing how societies were organized just before the revolutionary period [3]. This era is characterized as the **very end of the premodern world** [4].",
   "content_and_themes": [
     {
-      "theme": "Political Structures: Dynastic Rule",
-      "details": ["Most states and empires were governed by a **single leader** (king, tsar, sultan, emperor, shah, or prince) who typically came from a **dynasty** [4]. The ruler’s legitimacy was often derived from birth and supported by religious and political elites [4]."]
-    },
-    {
-      "theme": "Divine Authority and Governance",
-      "details": ["Most emperors claimed they were **chosen or blessed by divine power** and ruled on behalf of God to maintain justice and order [4]. The question 'What was the divine right of kings?' helps students analyze the nature of monarchic governments [4]. For example, King James I’s 1610 speech to Parliament is used to illustrate how kings articulated their perceived divine inspiration and godlike power [5, 31]."]
-    },
-    {
-      "theme": "Social Hierarchy and Power",
-      "details": ["Customs of social order were generally **hierarchical**, meaning people were fundamentally unequal. Dynasties and elite groups protected their **wealth and privilege** through force and propaganda, usually resisting sharing power with lower social groups [5]."]
-    },
-    {
-      "theme": "Geographic Scope",
+      "theme": "I. Political Structures: Monarchy and Dynastic Rule",
       "details": [
-        "Students analyze maps of the major **gunpowder empires** (Qing China, Mughal India, Ottoman Empire, Safavid Persia, Spain, France, England), as well as global trade routes (Atlantic World, Pacific/Indian Ocean, and world trade systems) and colonial holdings [3]."]
+        "Most states and empires in 1750 were ruled by a **single leader**, who might be called a king, tsar, sultan, emperor, shah, or prince.",
+        "The ruler usually came from a **dynasty** (a family of rulers).",
+        "Rulers secured their legitimacy from **birth** into the royal family and the subsequent support of **religious and political elites**.",
+        "Most emperors claimed they had been **chosen or blessed by divine power** and ruled on behalf of God to maintain order and justice in the society.",
+        "Dynasties and elite groups protected their power, wealth, and privileges through customs of social order, force, and propaganda.",
+        "They usually **resisted giving power** to lower social groups, fearing they would lose their wealth and privileges."
+      ]
+    },
+    {
+      "theme": "II. Global Geography and Economy",
+      "details": [
+        "Students analyze maps of the **gunpowder empires** (Qing China, Mughal India, Ottoman Empire, Safavid Persia, Spain, France, England), trade routes (Atlantic World, Pacific/Indian Ocean, and world trade systems), and colonies.",
+        "Customs of social order across all societies were **hierarchical**, meaning people were generally unequal."
+      ]
     }
   ]
 }

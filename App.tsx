@@ -9,7 +9,7 @@ import { Spinner } from './components/Spinner';
 import { ArrowLeftIcon, ArrowRightIcon, UploadIcon, KeyIcon, LinkIcon, DocumentIcon, ImageIcon } from './components/IconComponents';
 import { kebabCase, markdownToHtml, blobToBase64 as fileToB64 } from './utils';
 
-const LECTURE_PLAN_URL = 'https://firebasestorage.googleapis.com/v0/b/gemini-vibeathon.firebasestorage.app/o/plans%2FTWI1750.json?alt=media';
+const LECTURE_PLAN_URL = 'https://firebasestorage.googleapis.com/v0/b/gemini-vibeathon.firebasestorage.app/o/plans%2FTWI1750.json?alt=media#'+new Date().getTime();
 const INITIAL_IMAGE_URL = 'https://firebasestorage.googleapis.com/v0/b/gemini-vibeathon.firebasestorage.app/o/media%2Falex.jpg?alt=media';
 
 const generationMessages = [
