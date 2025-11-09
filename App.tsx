@@ -842,6 +842,7 @@ export default function App() {
                     </div>
 
                     {/* Generate Button */}
+                        <input type="textarea" className={"h-32 w-full mb-4 px-3 py-2 rounded border border-gray-200"} placeholder={"Customize your lecture plan here"} />
                     <div className="flex justify-center mb-8">
                         <button
                             onClick={handleGenerateLecture}
