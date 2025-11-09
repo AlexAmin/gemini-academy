@@ -132,6 +132,22 @@ export default function App() {
             } else {
                 plan = await fetchLecturePlan(LECTURE_PLAN_URL);
             }
+
+            // Validate that all theme.details are not empty
+            const emptyThemes = plan.content_and_themes
+                .map((theme, index) => ({ theme, index }))
+                .filter(({ theme }) =>
+                    !theme.details ||
+                    !Array.isArray(theme.details) ||
+                    theme.details.length === 0 ||
+                    theme.details.every(detail => !detail || !detail.trim())
+                );
+
+            if (emptyThemes.length > 0) {
+                const themeNames = emptyThemes.map(({ theme, index }) => `"${theme.theme}" (slide ${index + 1})`).join(', ');
+                throw new Error(`Invalid lecture plan: The following themes have empty content: ${themeNames}. Please ensure all themes have meaningful details.`);
+            }
+
             setLecturePlan(plan);
 
             let initialImageBase64: string;
@@ -149,8 +165,8 @@ export default function App() {
 
             setStatus({ stage: '3/5', message: 'Generating multimedia assets...' });
             const [audioBase64s, imageBlobs, videoBlob, quizData] = await Promise.all([
-                Promise.all(plan.content_and_themes.map(theme => generateAudio(theme.details))),
-                Promise.all(plan.content_and_themes.map(theme => generateImage(`${theme.theme}: ${theme.details}`))),
+                Promise.all(plan.content_and_themes.map(theme => generateAudio(theme.details.join(' ')))),
+                Promise.all(plan.content_and_themes.map(theme => generateImage(`${theme.theme}: ${theme.details.join(' ')}`))),
                 generateVideo(`${plan.overview} ${plan.guiding_questions.join(' ')}`, contextualImageBase64).catch(err => {
                     if (err.message.includes("Requested entity was not found.")) {
                         setIsApiKeySelected(false);
@@ -158,7 +174,7 @@ export default function App() {
                     }
                     throw err;
                 }),
-                generateQuiz(plan.content_and_themes.map(t => t.details).join('\n\n'), 5),
+                generateQuiz(plan.content_and_themes.map(t => t.details.join('\n\n')).join('\n\n'), 5),
             ]);
 
             setStatus({ stage: '4/5', message: 'Uploading media to cloud...' });
@@ -245,7 +261,7 @@ export default function App() {
                               <img src="${imageUrl}" alt="${theme.theme}" />
                             </div>
                             <div class="slide-content">
-                              ${markdownToHtml(theme.details)}
+                              ${markdownToHtml(theme.details.join('\n\n'))}
                             </div>
                           </div>
                           <div class="slide-footer">
@@ -913,7 +929,7 @@ export default function App() {
             slideComponent = (
                 <Slide
                     title={theme.theme}
-                    content={markdownToHtml(theme.details)}
+                    content={theme.details.join('\n\n')}
                     audioUrl={generatedAssets.audioUrls[themeIndex]}
                     imageUrl={generatedAssets.imageUrls[themeIndex]}
                     slideNumber={slideIndex}

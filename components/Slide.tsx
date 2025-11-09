@@ -1,5 +1,6 @@
 
 import React, { useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 interface SlideProps {
     title: string;
@@ -42,10 +43,13 @@ export const Slide: React.FC<SlideProps> = ({ title, content, audioUrl, imageUrl
 
                 {/* Content */}
                 <div className="bg-white rounded-2xl shadow-xl p-6 overflow-y-auto">
-                    <div
-                        className="prose prose-lg max-w-none prose-headings:text-indigo-600 prose-p:text-gray-700 prose-strong:text-gray-900 prose-ul:text-gray-700 prose-ol:text-gray-700"
-                        dangerouslySetInnerHTML={{ __html: content }}
-                    />
+                    <div className="prose prose-lg max-w-none prose-headings:text-indigo-600 prose-p:text-gray-700 prose-strong:text-gray-900 prose-ul:text-gray-700 prose-ol:text-gray-700">
+                        {content && content.trim() ? (
+                            <ReactMarkdown>{content}</ReactMarkdown>
+                        ) : (
+                            <p className="text-gray-400 italic">No content available for this slide.</p>
+                        )}
+                    </div>
                 </div>
             </div>
 

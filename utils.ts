@@ -13,8 +13,8 @@ export function kebabCase(str: string): string {
 }
 
 export function markdownToHtml(md: string): string {
-    if (typeof md !== 'string') {
-        return '';
+    if (typeof md !== 'string' || !md.trim()) {
+        return '<p class="text-gray-400 italic">No content available for this slide.</p>';
     }
     let html = md;
     // Headers (## Header -> <h2>Header</h2>)

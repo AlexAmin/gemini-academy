@@ -10,7 +10,7 @@ export interface LecturePlan {
 
 export interface ContentAndTheme {
   theme: string;
-  details: string;
+  details: string[];
 }
 
 export interface QuizQuestion {
