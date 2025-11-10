@@ -5,6 +5,9 @@ Gemini Academy is an AI-powered educational content generator that takes structu
 ![A Teacher](plans/teacher_sample.png)
 ---
 
+## Demo
+[Student Dashboard](https://gemini-academy-student.web.app/)
+[Teacher Dashboard](https://gemini-academy-teacher.web.app/)
 ## Features
 
 - **🎙️ AI Narration**: Generate natural-sounding audio narration using Gemini TTS
